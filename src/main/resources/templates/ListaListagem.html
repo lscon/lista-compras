@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="LayoutPadrao">
+
+<section layout:fragment="Conteudo">
+
+	
+	<div class="panel panel-default" style="margin: 10px">
+		<div class="panel-heading">
+			<h1 class="panel-title">Lista de festas</h1>
+		</div>
+		<div class="panel-body">
+			<form class="form-inline" method="POST" th:object="${lista}"
+			      th:action="@{/listas}"  style="margin: 20px 0">
+			      <div class="form-group">
+			      	<input type="hidden" th:field="*{id}" />
+			      	<input type="text" th:field="*{nome}" class="form-control" placeholder="Nome" />
+			      	<button type="submit" class="btn btn-primary">Salvar</button>
+			      </div>
+			 </form>
+
+			
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Festa</th>
+					</tr>
+				</thead>
+				<tbody>lista
+					<tr th:each="f : ${listas}">
+						<td th:text="${f.id}"></td>
+						<td th:text="${f.nome}"></td>
+						<td>
+							<a th:href="@{/lista/alterar/}+${f.id}" 
+						    class="glyphicon glyphicon-pencil">
+							</a>
+							<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
+		   								th:attr="data-id=${f.id}, data-name=${f.nome}, data-model='festa' "
+		   								title="Excluir" rel="tooltip" data-placement="top">
+		   							<span class="glyphicon glyphicon-remove"></span>
+		   					</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div  th:replace="fragments/exclusao :: exclusao"> </div>
+</section>
+
+
+</html>

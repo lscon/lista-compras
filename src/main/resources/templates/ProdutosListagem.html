@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="LayoutPadrao">
+
+<section layout:fragment="Conteudo">
+
+	
+	<div class="panel panel-default" style="margin: 10px">
+		<div class="panel-heading">
+			<h1 class="panel-title">Lista de convidados</h1>
+		</div>
+		<div class="panel-body">
+			<form class="form-inline" method="POST" th:object="${produto}"
+			      th:action="@{/produtos}"  style="margin: 20px 0">
+			      <div class="form-group">
+			      	<input type="hidden" th:field="*{id}" />
+			      	<input type="text" th:field="*{descricao}" class="form-control" placeholder="Nome" />
+			      	<input type="text" th:field="*{quantidade}" class="form-control" placeholder="Quantidade" />
+			      	<select th:field="*{lista}">
+						<option value="">Selecione a lista</option>
+						<option th:each="f : ${listas}" th:value="${f.id}" th:text="${f.nome}" selected="selected"></option>
+					</select>
+					<button type="submit" class="btn btn-primary">Salvar</button>
+			      </div>
+			 </form>
+
+			
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>descricao</th>
+						<th>quantidade</th>
+						<th>nome da lista</th>
+						<th>Ação</th>
+
+					</tr>
+				</thead>
+				<tbody>
+				
+				<!-- 
+				<span th:each="component : ${body.components}" 
+      th:object="${component}"
+      th:if="${component.name} == 'MATERIAL'">
+  <button th:text="*{title}"></button>
+				 -->
+				
+				
+					<tr th:each="c : ${produtos}"
+						 th:object="${c}"
+						th:if="${c.lista.id}==1">
+						<td th:text="${c.id}"></td>
+						<td th:text="${c.descricao}"></td>
+						<td th:text="${c.quantidade}">3</td>
+						<td th:text="${c.lista.nome}"></td>
+						<td>
+							<a th:href="@{/produtos/alterar/}+${c.id}" 
+						    class="glyphicon glyphicon-pencil">
+							</a>
+							<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
+		   								th:attr="data-id=${c.id}, data-name=${c.descricao}, data-model='produto' "
+		   								title="Excluir" rel="tooltip" data-placement="top">
+		   							<span class="glyphicon glyphicon-remove"></span>
+		   					</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div  th:replace="fragments/exclusao :: exclusao"> </div>
+	
+</section>
+
+
+</html>
